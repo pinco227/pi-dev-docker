@@ -11,15 +11,17 @@ services:
     volumes:
       - appdata:/var/www/pi-dev
     depends_on:
-      - mongodb
+      - mongo
     networks:
       - frontend
       - backend
 
-  mongodb:
+  mongo:
     image: mongo:4.0.8
-    container_name: mongodb
+    container_name: mongo
     restart: unless-stopped
+    ports:
+      - "27017:27017"
     command: mongod --auth
     volumes:
       - mongodbdata:/data/db/pi-dev
