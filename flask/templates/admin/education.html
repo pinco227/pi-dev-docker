@@ -1,0 +1,63 @@
+{% extends "admin/base.html" %}
+{% block content %}
+    <section id="get_education">
+        <div class="row my-2 align-items-center">
+            <div class="order-1 order-sm-0 col-sm-8 col-md-9 col-lg-10">
+                <h1 class="text-start my-2">Education</h1>
+            </div>
+            <div class="order-0 order-sm-1 col-8 offset-2 offset-sm-0 col-sm-4 col-md-3 col-lg-2 text-center">
+                <img src="{{ url_for('static', filename='images/education.svg') }}" alt="Education" class="section-image">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <a href="{{ url_for('add_education') }}" class="btn btn-round btn-success float-end m-4" data-bs-toggle="tooltip" data-bs-placement="left" title="Add new"><i class="bi bi-plus"></i></a>
+            </div>
+        </div>
+        {% if education|length %}
+            <div class="card">
+                <form action="{{ url_for('get_education') }}" method="POST">
+                {{ form.csrf_token }}
+                <div class="card-header text-center">
+                    {{ form.submit(class="btn btn-lg btn-accent", id="submit-top") }}
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for school in education %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <div class="row w-100 align-items-center">
+                                <div class="col-12 col-md text-center">
+                                    <h4>{{ school.school }}</h4>
+                                    <h5 class="fst-italic">{{ school.department }}</h5>
+                                    {{ school.period }}
+                                </div>
+                                <div class="col-12 col-md text-start">
+                                    <h5>{{ school.title }}</h5>
+                                    <p>{{ school.description }}</p>
+                                </div>
+                                <div class="col-12 col-md-3 col-lg-1">
+                                    <div class="form-floating mb-3 mb-sm-0">
+                                        <input type="number" class="form-control mb-0" id="order[{{ school._id }}]"
+                                            name="order[{{ school._id }}]" value="{{ school.order }}" required>
+                                        <label for="order[{{ school._id }}]">Order</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="controls d-flex flex-column align-items-center justify-content-around ms-4">
+                                <a href="{{ url_for('delete_education', id=school._id) }}" class="btn btn-sm btn-danger confirm"><i class="bi bi-trash"></i></a>
+                                <a href="{{ url_for('edit_education', id=school._id) }}" class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div class="card-footer text-center">
+                    {{ form.submit(class="btn btn-lg btn-accent") }}
+                </div>
+                </form>
+            </div>
+        {% else %}
+            <div class="col">
+                {% include "inc/no-results.html" %}
+            </div>
+        {% endif %}
+    </section>
+{% endblock content %}

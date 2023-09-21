@@ -1,0 +1,14 @@
+<div class="hero-social">
+    {% for link in links %}
+        <div><a href="{{ link.url }}" target="_blank"><i class="bi bi-{{ link.icon }}"></i></a></div>
+    {% endfor %}
+    {% if session['user'] %}
+        <div>
+            <a href="{{ url_for('get_links') }}" class="bg-secondary text-light rounded-circle"><i class=" bi
+                bi-pencil"></i></a>
+        </div>
+        <div>
+            <a href="{{ url_for('add_link') }}" class="bg-success rounded-circle text-light"><i class="bi bi-plus"></i></a>
+        </div>
+    {% endif %}
+</div>

@@ -1,0 +1,262 @@
+/*------------------------------------------ DOCUMENT */
+
+html, body {
+    height: 100%;
+    font-size: .875rem;
+}
+
+main {
+    position: relative;
+    padding: 48px 0 0;
+}
+
+.section-image {
+    width: 100%;
+    max-width: 180px;
+}
+
+.card {
+    border-radius: 1rem;
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, .3);
+    background-color: var(--accent-light);
+}
+
+.toast-body a {
+    color: var(--main-bg-color);
+}
+
+.toast-body a:hover {
+    color: var(--text-light);
+}
+
+/*------------------------------------------ BUTTONS */
+
+.btn-round {
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-shadow: -1px -1px rgb(0 0 0 / 40%);
+    color: var(--text-light);
+    font-size: 2rem;
+}
+
+.btn-round.btn-success {
+    font-size: 3rem;
+}
+
+/*------------------------------------------ NAVBAR */
+
+.navbar-brand {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    font-size: 1rem;
+    background-color: var(--accent-dark);
+}
+
+.navbar .navbar-toggler {
+    top: .25rem;
+    right: 0rem;
+}
+
+.navbar-nav {
+    flex-direction: row;
+}
+
+.navbar-nav .nav-item {
+    padding: 0 .5rem;
+}
+
+.navbar-nav .nav-item .nav-link {
+    padding: .5rem;
+}
+
+/*------------------------------------------ SIDEBAR */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0 0;
+    background-color: var(--accent-light);
+    box-shadow: inset -1px 0 6px rgba(0, 0, 0, .1);
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* Scrollable contents if viewport is shorter than content. */
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    color: var(--text-dark);
+    text-shadow: none;
+}
+
+.sidebar .nav-link .bi {
+    margin-right: 4px;
+    color: #727272;
+}
+
+.sidebar .nav-link.active {
+    color: var(--accent);
+}
+
+.sidebar .nav-link:hover .bi, .sidebar .nav-link.active .bi {
+    color: inherit;
+}
+
+/*------------------------------------------ LOGIN */
+
+.body-login {
+    display: flex;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: var(--main-bg-color);
+}
+
+.form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+}
+
+.form-signin .form-floating:focus-within {
+    z-index: 2;
+}
+
+.form-signin input[type="text"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/*------------------------------------------ DASHBOARD */
+
+#card-quick-links .card-body .col a {
+    width: 100%;
+    height: 100%;
+}
+
+#card-news {
+    background-color: var(--text-light);
+}
+
+.stat-container {
+    background-color: var(--accent);
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent-dark) 100%);
+    padding: 1rem;
+    border: 1px solid var(--accent-dark);
+    border-radius: 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    color: var(--text-light);
+    text-shadow: 1px 2px 3px rgba(0, 0, 0, .5);
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, .3);
+}
+
+.stat-container .stat-count {
+    font-size: 3rem;
+}
+
+.stat-container .stat-caption {
+    font-size: 1.5rem;
+}
+
+/*------------------------------------------ SKILLS */
+
+/* CREDIT
+* https://css-tricks.com/value-bubbles-for-range-inputs/
+*/
+
+.range-wrap {
+    position: relative;
+    margin: 0 auto 2rem;
+}
+
+.range {
+    width: 100%;
+}
+
+.bubble {
+    background: var(--accent-dark);
+    color: var(--text-light);
+    padding: 4px 12px;
+    position: absolute;
+    border-radius: 4px;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.bubble::after {
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--accent-dark);
+    top: -1px;
+    left: 50%;
+}
+
+/*------------------------------------------ PHOTO EDIT */
+
+.photo-container .btn {
+    margin-top: -4rem;
+}
+
+#drop-area {
+    background-color: var(--main-bg-color);
+    border-radius: 1rem;
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    box-shadow: inset 1px 2px 2px rgba(0, 0, 0, .3);
+    transition: transform .3s ease-in-out, box-shadow .3s ease-in-out;
+}
+
+#drop-area.highlight, #drop-area:hover {
+    cursor: pointer;
+    border-color: var(--accent);
+    background-color: var(--text-light);
+    box-shadow: inset 3px 4px 2px rgba(var(--accent-dark-rgb), .5);
+    transform: scale(1.02);
+    color: var(--accent);
+}
+
+#drop-area .bi {
+    display: block;
+    font-size: 2rem;
+    margin: .5rem;
+}
+
+#drop-file-elem {
+    display: none;
+}
+
+/*------------------------------------------ MEDIA QUERIES */
+
+@media (max-width: 359px) {
+    #card-quick-links .card-body {
+        flex-direction: column;
+    }
+}

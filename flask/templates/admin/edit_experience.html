@@ -1,0 +1,53 @@
+{% extends "admin/base.html" %}
+{% block content %}
+    <section id="edit_job">
+        <div class="row my-2 align-items-center">
+            <div class="order-1 order-sm-0 col-sm-8 col-md-9 col-lg-10">
+                <h1 class="text-start my-2">Edit Work Experience</h1>
+            </div>
+            <div class="order-0 order-sm-1 col-8 offset-2 offset-sm-0 col-sm-4 col-md-3 col-lg-2 text-center">
+                <img src="{{ url_for('static', filename='images/job.svg') }}" alt="Job" class="section-image">
+            </div>
+        </div>
+        {% if job %}
+            <div class="card col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+                <form action="{{ url_for('edit_experience', id=job._id) }}" method="POST">
+                    {{ form.csrf_token }}
+                    <div class="card-header">
+                        <h4 class="text-center">Edit</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-floating mb-3">
+                            {{ form.company(class="form-control", value="%s" | format(job.company)) }}
+                            {{ form.company.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.period(class="form-control", value="%s" | format(job.period)) }}
+                            {{ form.period.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.role(class="form-control", value="%s" | format(job.role)) }}
+                            {{ form.role.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.description(class="form-control") }}
+                            {{ form.description.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.order(class="form-control", value="%s" | format(job.order)) }}
+                            {{ form.order.label }}
+                        </div>
+                    </div>
+                    <div class="card-footer text-center d-flex justify-content-between">
+                        <a href="{{ url_for('get_experience') }}" class="btn btn-lg btn-danger">Cancel</a>
+                        {{ form.submit(class="btn btn-lg btn-accent confirm", id="submit-form") }}
+                    </div>
+                </form>
+            </div>
+        {% else %}
+            <div class="col">
+                {% include "inc/no-results.html" %}
+            </div>
+        {% endif %}
+    </section>
+{% endblock content %}

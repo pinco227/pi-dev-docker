@@ -1,0 +1,123 @@
+{% extends "admin/base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+{% endblock styles %}
+{% block content %}
+<section id="edit_project">
+    <div class="row my-2 align-items-center">
+        <div class="order-1 order-sm-0 col-sm-8 col-md-9 col-lg-10">
+            <h1 class="text-start my-2">Edit Project</h1>
+        </div>
+        <div class="order-0 order-sm-1 col-8 offset-2 offset-sm-0 col-sm-4 col-md-3 col-lg-2 text-center">
+            <img src="{{ url_for('static', filename='images/project.svg') }}" alt="Project" class="section-image">
+        </div>
+    </div>
+    <div class="row g-4">
+        {% if project %}
+        <div class="col-md-7">
+            <div class="card">
+                <form action="{{ url_for('edit_project', id=project._id) }}" method="POST">
+                    {{ form.csrf_token }}
+                    <div class="card-header">
+                        <h4 class="text-center">Edit</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-floating mb-3">
+                            {{ form.title(class="form-control", value="%s" | format(project.title)) }}
+                            {{ form.title.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.slug(class="form-control", readonly="readonly", value="%s" | format(project.slug)) }}
+                            {{ form.slug.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.year(class="form-control", value="%s" | format(project.year)) }}
+                            {{ form.year.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.tech(class="form-control", placeholder="Technologies Used", value="%s" | format(project.tech)) }}
+                            {{ form.tech.label }}
+                            <small class="text-muted">Separated by comma.</small>
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.repo(class="form-control", value="%s" | format(project.repo)) }}
+                            {{ form.repo.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.live_url(class="form-control", value="%s" | format(project.live_url)) }}
+                            {{ form.live_url.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.brief(class="form-control", maxlength="100") }}
+                            {{ form.brief.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.description(class="form-control") }}
+                            {{ form.description.label }}
+                        </div>
+                        <div class="form-check form-switch mb-3">
+                            {{ form.featured(class="form-check-input") }}
+                            {{ form.featured.label(class="form-check-label") }}
+                        </div>
+                    </div>
+                    <div class="card-footer text-center d-flex justify-content-between">
+                        <a href="{{ url_for('get_projects') }}" class="btn btn-lg btn-danger">Cancel</a>
+                        {{ form.submit(class="btn btn-lg btn-accent confirm", id="submit-form") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="text-center">Photos</h4>
+                </div>
+                <div class="card-body row justify-content-center g-2">
+                    <div class="mb-2">Current Photos</div>
+                    <div id="gallery" class="row">
+                        {% for photo in project.photos %}
+                        <div class="photo-container col-sm-4 col-md-6 col-lg-4" data-src="{{ photo.url }}"
+                            data-fileid="{{ photo.public_id }}">
+                            <a href="{{ photo.url }}" class="projects-gallery">
+                                <img class="img-thumbnail gallery-item" src="{{ photo.url }}"
+                                    alt="Photo {{ loop.index }}">
+                            </a>
+                            <a class="delete-photo btn btn-danger" data-photo-key="{{ loop.index0 }}">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <input type="hidden" id="collection" value="projects">
+                        <input type="hidden" id="doc-id" value="{{ project._id }}">
+                        <div class="mb-2">Add Photos</div>
+                        <input type="file" name="files" id="drop-file-elem" accept="image/*" multiple>
+                        <div id="drop-area" data-multiple="true">
+                            <i class="bi bi-upload"></i>
+                            Drag&drop file here or click to select...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col">
+            {% include "inc/no-results.html" %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock content %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+<!-- CREDIT: https://github.com/biati-digital/glightbox -->
+<script>
+    const lightbox = GLightbox({ 'selector': '.projects-gallery' });
+</script>
+<script src="{{ url_for('static', filename='js/slugify.js') }}"></script>
+<script src="{{ url_for('static', filename='js/photos.js') }}"></script>
+<script src="https://cdn.tiny.cloud/1/emgmzxkejmtysjj6vbbmqrkk2zkr2qoo44j51u7oam308dtn/tinymce/5/tinymce.min.js"
+    referrerpolicy="origin"></script>
+<script src="{{ url_for('static', filename='js/tiny.js') }}"></script>
+{% endblock scripts %}

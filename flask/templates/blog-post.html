@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}
+- {{ post.title }}
+{% endblock title %}
+{% block styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+{% endblock styles %}
+
+{% block content %}
+<!-- Blog Post SECTION -->
+<section id="blog-post">
+    <div class="page-title-container bg-accent">
+        <h2 class="text-shadow">Blog Post</h2>
+    </div>
+    <!-- CREDIT: https://codepen.io/xyzzyestudioweb/pen/JgdKOR -->
+    <svg class="separator" width="100%" height="60" viewBox="0.1 0.1 180 40" preserveAspectRatio="none">
+        <linearGradient x1="0" y1="0" x2="100%" y2="0" id="gradient">
+            <stop class="gradient-light" offset="0"></stop>
+            <stop class="gradient-dark" offset="100%"></stop>
+        </linearGradient>
+        <g transform="translate(-18.298844,-77.973964)">
+            <path class="fill-dark"
+                d="M 31.615583,86.351641 H 192.16499 v 26.901969 c 0,0 -32.03411,-14.237983 -59.62682,-12.72484 -22.34188,1.2252 -54.779359,9.72634 -54.779359,9.72634 0,0 -22.029534,3.62882 -34.471238,-1.88988 -12.441702,-5.51871 -11.67199,-22.013589 -11.67199,-22.013589 z">
+            </path>
+            <path fill="url(#gradient)"
+                d="M 18.441597,78.106256 H 198.58126 v 39.288614 c 0,0 -43.10672,-27.825245 -73.47599,-19.687823 -30.369264,8.137423 -46.832208,12.548653 -46.832208,12.548653 0,0 -32.775418,8.05972 -46.735258,0 C 17.577964,102.19598 18.441597,78.106256 18.441597,78.106256 Z">
+            </path>
+        </g>
+    </svg>
+    <div class="container-xl">
+        {% include "inc/breadcrumbs.html" %}
+        <div class="row mb-4">
+            <div class="col">
+                <a href="{{ url_for('blog') }}" class="btn btn-accent-light"><i class="bi bi-arrow-left-circle"></i> Go
+                    back</a>
+            </div>
+        </div>
+        {% if post %}
+        <div class="row">
+            <div class="col">
+                <h3 class="post-title">{{ post.title }}
+                    {% if session['user'] %}
+                    <a href="{{ url_for('delete_blog', id=post._id) }}"
+                        class="btn btn-danger confirm  mx-2 float-end"><i class="bi bi-trash"></i></a>
+                    <a href="{{ url_for('edit_blog', id=post._id) }}" class="btn btn-accent-light float-end"><i
+                            class="bi bi-pencil"></i></a>
+                    {% endif %}
+                </h3>
+                <p><small class="text-muted">{{ post.added_on }}</small></p>
+            </div>
+        </div>
+        <div class="row mb-4 g-0 blog-document">
+            <div class="col">
+                {% if post.photos|length %}
+                <figure class="float-start col-sm-6 col-md-5">
+                    <a href="{{ post.photos[0].url }}" class="blog-gallery">
+                        <img src="{{ post.photos[0].url }}" alt="{{ post.title }}" class="post-photo gallery-item">
+                    </a>
+                </figure>
+                {% else %}
+                <i class="bi bi-blockquote-left fs-1 float-start mx-4"></i>
+                {% endif %}
+                <div class="blog-document-body">{{ post.body|safe }}</div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col">
+            {% include "inc/no-results.html" %}
+        </div>
+        {% endif %}
+        <div class="row">
+            <div class="col">
+                <a href="{{ url_for('blog') }}" class="btn btn-accent-light"><i class="bi bi-arrow-left-circle"></i> Go
+                    back</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+<!-- CREDIT: https://github.com/biati-digital/glightbox -->
+<script>
+    const lightbox = GLightbox({ 'selector': '.blog-gallery' });
+</script>
+{% endblock scripts %}

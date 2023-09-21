@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ settings.name }}</title>
+    <style>
+        /*------------------------------------------ IMPORT */
+        @import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@300;400;500;700&family=Lato:wght@300;400;700&family=Source+Code+Pro:wght@400;500&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
+
+        /*------------------------------------------ DOCUMENT */
+        html, body {
+            font-family: 'Lato', sans-serif;
+            color: #023060;
+        }
+        hr.separator {
+            border-top: 2px dashed #1a9ce9;
+            height:0;
+        }
+        span.icon {
+            font-size: 2rem;
+            margin-top: 3rem;
+            color: #1a9ce9;
+            border-radius: 50%;
+            border: 1px solid #1a9ce9;
+            display:inline-block;
+            width: 3.5rem;
+            height: 3.5rem;
+            line-height: 3.5rem;
+        }
+        div.item {
+            border-left: 3px solid #ccdde8;
+            padding-left: 1.5rem;
+            margin-top: 1rem;
+            margin-bottom: 3rem;
+        }
+        .w-50 {
+            width: 50%;
+            padding: 1rem;
+        }
+        .w-100 {
+            width: 100%;
+        }
+        table {
+            margin-top: 0;
+        }
+
+        /*------------------------------------------ TYPOGRAPHY */
+        h1, h2, h3, h4, h5 {
+            color: #044488;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Alegreya Sans', sans-serif;
+        }
+        .fw-normal {
+            font-weight: normal;
+        }
+        .no-margin {
+            margin: 0;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-left {
+            text-align: left;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .text-light {
+            font-weight: lighter;
+        }
+
+        /*------------------------------------------ INTRODUCTION */
+        .head {
+            display:flex;
+        }
+
+        /*------------------------------------------ SKILLS */
+        .skills li {
+            display:inline;
+            padding: 0.5rem;
+            margin-right: 0.5rem;
+            border-radius:0.5rem;
+            color: #fff;
+            background-color: #1a9ce9;
+            line-height: 3rem;
+        }
+
+        /*------------------------------------------ PORTFOLIO */
+
+        .year {
+            padding: 0.3rem;
+            margin-right: 0.3rem;
+            border-radius:0.3rem;
+            color: #fff;
+            background-color: #333;
+        }
+
+        .techs {
+            padding: 0;
+        }
+
+        .techs li {
+            display:inline;
+            padding: 0.3rem;
+            margin-right: 0.3rem;
+            border-radius:0.3rem;
+            color: #000;
+            background-color: #ddd;
+            line-height: 1.5rem;
+        }
+
+        /*------------------------------------------ IMAGES */
+        .profile-container {
+            display: inline-block;
+            padding: 0.5rem;
+            border: 2px solid #1a9ce9;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .profile {
+            width: 200px;
+            height:200px;
+            {% if settings.photos|length %}
+                background: url('{{ settings.photos[0].url }}');
+            {% endif %}
+            background-size: cover;
+            border-radius: 50%;
+        }
+        img.gallery {
+            height: 100px;
+            width: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- PROFILE -->
+    <table class="w-100">
+        <tr>
+            {% if settings.photos|length %}
+                <td class="w-50 text-right">
+                    <div class="profile-container">
+                        <div class="profile"></div>
+                    </div>
+                </td>
+                <td class="w-50 text-left">
+            {% else %}
+                <td class="text-center">
+            {% endif %}
+                <h1>{{ settings.name }}</h1>
+                <h2>{{ settings.title }}</h2>
+                <h3 class="fw-normal no-margin">{{ settings.address }}</h3>
+                <h3 class="fw-normal no-margin">{{ settings.email }}</h3>
+                <h3 class="fw-normal no-margin">{{ settings.phone }}</h3>
+            </td>
+        </tr>
+    </table>
+    <p class="text-center">{{ settings.bio }}</p>
+    <p class="text-center">{{ settings.cover }}</p>
+    <!-- WORK EXPERIENCE -->
+    <div class="text-center"><span class="icon"><i class="fas fa-briefcase"></i></span></div>
+    <hr class="separator">
+    <h2 class="text-center">Work Experience</h2>
+    {% for job in jobs %}
+        <div class="item">
+            <h3>{{ job.role }}</h3>
+            <h4 class="no-margin">{{ job.company }}</h4>
+            <p class="no-margin text-light">{{ job.period }}</p>
+            <p>{{ job.description }}</p>
+        </div>
+    {% endfor %}
+    <!-- EDUCATION -->
+    <div class="text-center"><span class="icon"><i class="fas fa-university"></i></span></div>
+    <hr class="separator">
+    <h2 class="text-center">Education</h2>
+    {% for school in schools %}
+        <div class="item">
+            <h3>{{ school.title }}</h3>
+            <h4 class="no-margin">{{ school.school }}</h4>
+            <p class="no-margin text-light">{{ school.period }}</p>
+            <p class="no-margin">{{ school.department }}</p>
+            <p>{{ school.description }}</p>
+        </div>
+    {% endfor %}
+    <!-- SKILLS -->
+    <div class="text-center"><span class="icon"><i class="fas fa-lightbulb"></i></span></div>
+    <hr class="separator">
+    <h2 class="text-center">Skills</h2>
+    <ul class="skills text-center">
+    {% for skill in skills %}
+        <li>{{ skill.name }}</li>
+    {% endfor %}
+    </ul>
+    <!-- PORTFOLIO -->
+    <div class="text-center"><span class="icon"><i class="fas fa-folder-open"></i></span></div>
+    <hr class="separator">
+    <h2 class="text-center">Portfolio</h2>
+    {% for project in projects %}
+        <div class="item">
+            <h3>{{ project.title }}</h3>
+            <span class="year">{{ project.year }}</span>
+            <ul class="techs">
+            {% set technologies = project.tech.split(',') %}
+            {% for tech in technologies %}
+                <li>{{ tech }}</li>
+            {% endfor %}
+            </ul>
+            {% if project.live_url %}
+                <h4 class="fw-normal no-margin"><strong>Demo:</strong> <span class="text-light">{{ project.live_url }}</span></h4>
+            {% endif %}
+            {% if project.repo %}
+                <h4 class="fw-normal no-margin"><strong>Source:</strong> <span class="text-light">{{ project.repo }}</span></h4>
+            {% endif %}
+            <p>{{ project.brief }}</p>
+            {% if project.photos|length %}
+                {% for photo in project.photos[:5] %}
+                    <img src="{{ photo.url }}" alt="Photo {{ loop.index }}" class="gallery">
+                {% endfor %}
+            {% endif %}
+        </div>
+    {% endfor %}
+    <p>These are 5 of my featured projects. For a complete projects list, please visit my Portfolio at  <a href="{{ root }}"> {{ root }}</a></p>
+    <!-- TESTIMONIALS -->
+    <div class="text-center"><span class="icon"><i class="fas fa-quote-right"></i></span></div>
+    <hr class="separator">
+    <h2 class="text-center">Testimonials</h2>
+    {% for testimonial in testimonials %}
+        <div class="item">
+            <p class="no-margin"><em>"{{ testimonial.text }}"</em></p>
+            <h4 class="no-margin fw-normal">(<strong>{{ testimonial.author }}</strong> <span class="text-light">{{ testimonial.role }})</span></h4>
+        </div>
+    {% endfor %}
+    <!-- END -->
+    <hr class="separator">
+    <h5 class="text-center">This document has been automatically generated by <a href ="{{ root }}"> Dev.PI app</a>.</h5>
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}
+    - Write a testimonial
+{% endblock title %}
+{% block content %}
+    <!-- WriteTestimonial SECTION -->
+    <section id="write-testimonial">
+        <div class="page-title-container bg-accent">
+            <h2 class="text-shadow">Testimonial</h2>
+        </div>
+        <!-- CREDIT: https://codepen.io/xyzzyestudioweb/pen/JgdKOR -->
+        <svg class="separator" width="100%" height="60" viewBox="0.1 0.1 180 40" preserveAspectRatio="none">
+            <linearGradient x1="0" y1="0" x2="100%" y2="0" id="gradient">
+                <stop class="gradient-light" offset="0"></stop>
+                <stop class="gradient-dark" offset="100%"></stop>
+            </linearGradient>
+            <g transform="translate(-18.298844,-77.973964)">
+                <path class="fill-dark"
+                    d="M 31.615583,86.351641 H 192.16499 v 26.901969 c 0,0 -32.03411,-14.237983 -59.62682,-12.72484 -22.34188,1.2252 -54.779359,9.72634 -54.779359,9.72634 0,0 -22.029534,3.62882 -34.471238,-1.88988 -12.441702,-5.51871 -11.67199,-22.013589 -11.67199,-22.013589 z">
+                </path>
+                <path fill="url(#gradient)"
+                    d="M 18.441597,78.106256 H 198.58126 v 39.288614 c 0,0 -43.10672,-27.825245 -73.47599,-19.687823 -30.369264,8.137423 -46.832208,12.548653 -46.832208,12.548653 0,0 -32.775418,8.05972 -46.735258,0 C 17.577964,102.19598 18.441597,78.106256 18.441597,78.106256 Z">
+                </path>
+            </g>
+        </svg>
+        <div class="container-xl">
+            {% include "inc/breadcrumbs.html" %}
+            <div class="row justify-content-center">
+                <div class="col-md-8 testimonial-form-container">
+                    <div class="card card-testimonial-form">
+                        <div class="card-body">
+                            <h4 class="card-title">Write your thoughts</h4>
+                            <form class="d-grid" method="POST" action="{{ url_for('add_testimonial') }}">
+                                {{ form.csrf_token }}
+                                <div class="form-floating">
+                                    {{ form.name(class="form-control", placeholder="Your Name") }}
+                                    {{ form.name.label }}
+                                    {% for error in form.name.errors %}
+                                        <div class="invalid-feedback">
+                                            {{error}}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-floating">
+                                    {{ form.role(class="form-control", placeholder="Your Role and Company") }}
+                                    {{ form.role.label }}
+                                    {% for error in form.role.errors %}
+                                        <div class="invalid-feedback">
+                                            {{error}}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-floating">
+                                    {{ form.text(class="form-control", rows="3", placeholder="Your message here...") }}
+                                    {{ form.text.label }}
+                                    {% for error in form.text.errors %}
+                                        <div class="invalid-feedback">
+                                            {{error}}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="my-2">{{ form.recaptcha }}
+                                    {% for error in form.recaptcha.errors %}
+                                        <div class="invalid-feedback">
+                                            {{error}}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                {{ form.submit(class="btn btn-lg btn-accent bg-accent") }}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

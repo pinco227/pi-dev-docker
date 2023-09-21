@@ -1,0 +1,125 @@
+{% extends "admin/base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+{% endblock styles %}
+{% block content %}
+<section id="settings">
+    <div class="row my-2 align-items-center">
+        <div class="order-1 order-sm-0 col-sm-8 col-md-9 col-lg-10">
+            <h1 class="text-start my-2">Settings</h1>
+        </div>
+        <div class="order-0 order-sm-1 col-8 offset-2 offset-sm-0 col-sm-4 col-md-3 col-lg-2 text-center">
+            <img src="{{ url_for('static', filename='images/settings.svg') }}" alt="Settings" class="section-image">
+        </div>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-7">
+            <div class="card">
+                <form action="{{ url_for('get_settings') }}" method="POST">
+                    {{ form.csrf_token }}
+                    <div class="card-header">
+                        <h4 class="text-center">Edit</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-floating mb-3">
+                            {{ form.name(class="form-control", value="%s" | format(settings.name)) }}
+                            {{ form.name.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.title(class="form-control", value="%s" | format(settings.title)) }}
+                            {{ form.title.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.bio(class="form-control") }}
+                            {{ form.bio.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.cover(class="form-control") }}
+                            {{ form.cover.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.status(class="form-control", value="%s" | format(settings.status)) }}
+                            {{ form.status.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.availability(class="form-control form-select") }}
+                            {{ form.availability.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.email(class="form-control", value="%s" | format(settings.email)) }}
+                            {{ form.email.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.phone(class="form-control", value="%s" | format(settings.phone)) }}
+                            {{ form.phone.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.address(class="form-control", value="%s" | format(settings.address)) }}
+                            {{ form.address.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.meta_title(class="form-control", maxlength=60, value="%s" | format(settings.meta_title)) }}
+                            {{ form.meta_title.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.meta_desc(class="form-control", maxlength=160) }}
+                            {{ form.meta_desc.label }}
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.meta_keys(class="form-control mb-0", maxlength=255, value="%s" | format(settings.meta_keys)) }}
+                            {{ form.meta_keys.label }}
+                            <small class="text-muted">separated by comma</small>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center">
+                        {{ form.submit(class="btn btn-lg btn-accent confirm") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="text-center">Photo</h4>
+                </div>
+                <div class="card-body row justify-content-center g-2">
+                    <div class="mb-2">Current Photo</div>
+                    <div id="gallery" class="row">
+                        {% if settings.photos|length %}
+                        <div class="photo-container col-sm-4 col-md-6 col-lg-4" data-src="{{ settings.photos[0].url }}"
+                            data-fileid="{{ settings.photos[0].public_id }}">
+                            <a href="{{ settings.photos[0].url }}" class="settings-gallery">
+                                <img class="img-thumbnail gallery-item" src="{{ settings.photos[0].url }}"
+                                    alt="Profile Photo">
+                            </a>
+                            <a class="delete-photo btn btn-danger" data-photo-key="0">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <input type="hidden" id="collection" value="settings">
+                        <input type="hidden" id="doc-id" value="{{ settings._id }}">
+                        <div class="mb-2">New Photo</div>
+                        <input type="file" name="files" id="drop-file-elem" accept="image/*">
+                        <div id="drop-area" data-multiple="false">
+                            <i class="bi bi-upload"></i>
+                            Drag&drop file here or click to select...
+                        </div>
+                        <small>This will replace the current image (if any).</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+<!-- CREDIT: https://github.com/biati-digital/glightbox -->
+<script>
+    const lightbox = GLightbox({ 'selector': '.settings-gallery' });
+</script>
+<script src="{{ url_for('static', filename='js/photos.js') }}"></script>
+{% endblock scripts %}

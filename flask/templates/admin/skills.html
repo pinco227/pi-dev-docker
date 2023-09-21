@@ -1,0 +1,59 @@
+{% extends "admin/base.html" %}
+{% block content %}
+    <section id="get_skills">
+        <div class="row my-2 align-items-center">
+            <div class="order-1 order-sm-0 col-sm-8 col-md-9 col-lg-10">
+                <h1 class="text-start my-2">Skills</h1>
+            </div>
+            <div class="order-0 order-sm-1 col-8 offset-2 offset-sm-0 col-sm-4 col-md-3 col-lg-2 text-center">
+                <img src="{{ url_for('static', filename='images/skills.svg') }}" alt="Skills" class="section-image">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <a href="{{ url_for('add_skill') }}" class="btn btn-round btn-success float-end m-4" data-bs-toggle="tooltip" data-bs-placement="left" title="Add new"><i class="bi bi-plus"></i></a>
+            </div>
+        </div>
+        {% if skills|length %}
+            <div class="card">
+                <form action="{{ url_for('get_skills') }}" method="POST">
+                    {{ form.csrf_token }}
+                    <div class="card-header text-center">
+                        {{ form.submit(class="btn btn-lg btn-accent", id="submit-top") }}
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for skill in skills %}
+                            <li class="list-group-item d-flex justify-content-between">
+                                <div class="row w-100 align-items-center">
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="name[{{ skill._id }}]" name="name[{{ skill._id }}]" value="{{ skill.name }}" required>
+                                            <label for="name[{{ skill._id }}]">Skill</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="range-wrap">
+                                            <label for="percentage[{{ skill._id }}]" class="form-label">Percentage</label>
+                                            <input type="range" class="range form-range" id="percentage[{{ skill._id }}]" name="percentage[{{ skill._id }}]" min="0" max="100" value="{{ skill.percentage }}">
+                                            <output class="bubble"></output>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="controls d-flex align-items-center ms-4">
+                                    <a href="{{ url_for('delete_skill', id=skill._id) }}" class="btn btn-sm btn-danger confirm"><i class="bi bi-trash"></i></a>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="card-footer text-center">
+                        {{ form.submit(class="btn btn-lg btn-accent") }}
+                    </div>
+                </form>
+            </div>
+        {% else %}
+            <div class="col">
+                {% include "inc/no-results.html" %}
+            </div>
+        {% endif %}
+    </section>
+{% endblock content %}

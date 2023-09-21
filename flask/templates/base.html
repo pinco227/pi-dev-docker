@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="{{ settings.meta_desc }}" />
+    <meta name="keywords" content="{{ settings.meta_keys }}" />
+    <meta name="author" content="Paul Istratoaie">
+    <title>{{ settings.meta_title }} {% block title %} {% endblock title %}</title>
+    <!-- STYLES -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous"
+        type="text/css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+        type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
+    <!-- ICONS & THEME -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon-16x16.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="194x194"
+        href="{{ url_for('static', filename='images/favicon-194x194.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192"
+        href="{{ url_for('static', filename='images/android-chrome-192x192.png') }}">
+    <link rel="mask-icon" href="{{ url_for('static', filename='images/safari-pinned-tab.svg') }}" color="#168fd6">
+    <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+    <meta name="msapplication-TileColor" content="#168fd6">
+    <meta name="theme-color" content="#168fd6">
+    {% block styles %}{% endblock styles %}
+</head>
+
+<body class="d-flex flex-column h-100">
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-app bg-accent-transparent navbar-expand-md sticky-top">
+        <div class="container-xxl">
+            <a class="navbar-brand" href="{{ url_for('home') }}">{&pi;}Dev.PI</a>
+            <button class="navbar-toggler text-shadow" id="navbar-toggler" type="button" aria-label="Toggle navigation"
+                data-toggle="offcavas">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="navbar-collapse offcanvas-collapse" id="navbarCollapse">
+                <ul class="navbar-nav ms-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('home') }}" data-toggle="offcavas">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Résumé
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('home') }}#skills"
+                                    data-toggle="offcavas">Skills</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('home') }}#experience"
+                                    data-toggle="offcavas">Experience</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('home') }}#education"
+                                    data-toggle="offcavas">Education</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('home') }}#testimonials"
+                            data-toggle="offcavas">Testimonials</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('portfolio') }}" data-toggle="offcavas">Portfolio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('blog') }}" data-toggle="offcavas">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('contact') }}" data-toggle="offcavas">Contact</a>
+                    </li>
+                    {% if session['user'] %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin') }}" data-toggle="offcavas">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}" data-toggle="offcavas">Log out</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main class="flex-shrink-0">
+        <!-- flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="toast-container position-fixed top-1 start-50 translate-middle-x p-3 w-75" style="z-index: 5">
+            {% for category, message in messages %}
+            <div class="w-100 toast bg-{{ category }}" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <span class="m-auto px-2">
+                        <i class="bi bi-bell-fill"></i>
+                    </span>
+                    <div class="toast-body">
+                        <h4>{{ message }}</h4>
+                    </div>
+                    <a href="" class="me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"><i
+                            class="bi bi-x-circle"></i></a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        <!-- CONTENT -->
+        {% block content %}
+        {% endblock content %}
+    </main>
+    <footer class="footer mt-auto">
+        <!-- CREDIT: https://codepen.io/webd3v/pen/JbJvMQ -->
+        <svg class="footer-separator" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 100 100"
+            preserveAspectRatio="none">
+            <path d="M0 100 C40 0 60 0 100 100 Z"></path>
+        </svg>
+        {% include "inc/social-links.html" %}
+        <div class="container-xxl">
+            <div class="row">
+                <div class="col-md-6 text-center d-flex flex-column justify-content-center">
+                    <h3 class="text-shadow mt-3 mb-4">Thank you for visiting!</h3>
+                    <p class="d-none d-md-block">2021 &#169; Paul Istratoaie</p>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <h5 class="text-shadow">Résumé</h5>
+                    <ul class="footer-list list-group list-group-flush">
+                        <li class="list-group-item"><a href="{{ url_for('home') }}#skills">Skills</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('home') }}#experience">Experience</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('home') }}#education">Education</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('portfolio') }}">Portfolio</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('get_cv') }}">Download CV</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <h5 class="text-shadow">Links</h5>
+                    <ul class="footer-list list-group list-group-flush">
+                        <li class="list-group-item"><a href="{{ url_for('home') }}">Home</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('blog') }}">Blog</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('contact') }}">Contact</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('home') }}#testimonials">Testimonials</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('add_testimonial') }}">Write Testimonial</a>
+                        </li>
+                        {% if session['user'] %}
+                        <li class="list-group-item"><a href="{{ url_for('admin') }}">Dashboard</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('logout') }}">Log out</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            <div class="row d-block d-md-none">
+                <div class="col text-center mt-2">
+                    2021 &#169; Paul Istratoaie
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+        crossorigin="anonymous"></script>
+    {% block scripts %}{% endblock scripts %}
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

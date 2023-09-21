@@ -1,0 +1,62 @@
+{% extends "admin/base.html" %}
+{% block content %}
+    <section id="get_experience">
+        <div class="row my-2 align-items-center">
+            <div class="order-1 order-sm-0 col-sm-8 col-md-9 col-lg-10">
+                <h1 class="text-start my-2">Work Experience</h1>
+            </div>
+            <div class="order-0 order-sm-1 col-8 offset-2 offset-sm-0 col-sm-4 col-md-3 col-lg-2 text-center">
+                <img src="{{ url_for('static', filename='images/experience.svg') }}" alt="Work Experience" class="section-image">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <a href="{{ url_for('add_experience') }}" class="btn btn-round btn-success float-end m-4" data-bs-toggle="tooltip" data-bs-placement="left" title="Add new"><i class="bi bi-plus"></i></a>
+            </div>
+        </div>
+        {% if experience|length %}
+            <div class="card">
+                <form action="{{ url_for('get_experience') }}" method="POST">
+                {{ form.csrf_token }}
+                <div class="card-header text-center">
+                    {{ form.submit(class="btn btn-lg btn-accent", id="submit-top") }}
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for job in experience %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <div class="row w-100 align-items-center">
+                                <div class="col-12 col-md text-center">
+                                    <h4>{{ job.company }}</h4>
+                                    {{ job.period }}
+                                </div>
+                                <div class="col-12 col-md text-start">
+                                    <h5>{{ job.role }}</h5>
+                                    <p>{{ job.description }}</p>
+                                </div>
+                                <div class="col-12 col-md-3 col-lg-1">
+                                    <div class="form-floating mb-3 mb-sm-0">
+                                        <input type="number" class="form-control mb-0" id="order[{{ job._id }}]"
+                                            name="order[{{ job._id }}]" value="{{ job.order }}" required>
+                                        <label for="order[{{ job._id }}]">Order</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="controls d-flex flex-column align-items-center justify-content-around ms-4">
+                                <a href="{{ url_for('delete_experience', id=job._id) }}" class="btn btn-sm btn-danger confirm"><i class="bi bi-trash"></i></a>
+                                <a href="{{ url_for('edit_experience', id=job._id) }}" class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div class="card-footer text-center">
+                    {{ form.submit(class="btn btn-lg btn-accent") }}
+                </div>
+                </form>
+            </div>
+        {% else %}
+            <div class="col">
+                {% include "inc/no-results.html" %}
+            </div>
+        {% endif %}
+    </section>
+{% endblock content %}

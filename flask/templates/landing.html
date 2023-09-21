@@ -1,0 +1,265 @@
+{% set photo = 'it worked' %}
+{% extends "base.html" %}
+{% block styles %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+    <style>
+        .hero-img {
+            {% if settings.photos|length %}
+                background: url('{{ settings.photos[0].url }}');
+            {% else %}
+                background: url('{{ url_for('static', filename='images/no-photo.jpg') }}');
+            {% endif %}
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+{% endblock styles %}
+{% block content %}
+    <!-- HERO SECTION -->
+    <section id="hero" class="bg-accent">
+        <div class="container-xl">
+            <div class="row align-items-center justify-content-center g-5 py-5 hero">
+                <div class="col-8 col-sm-6 col-md-5 col-lg-4">
+                    {% if settings.photos|length %}
+                        <a href="{{ settings.photos[0].url }}"
+                                class="hero-img gallery">
+                        </a>
+                    {% else %}
+                        <div class="hero-img"></div>
+                    {% endif %}
+                </div>
+                <div class="col-12 col-md-7 col-lg-8">
+                    <h1 class="hero-title display-5 fw-bold lh-1 mb-3 text-shadow">{{ settings.name }}
+                        {% if session['user'] %}
+                            <a href="{{ url_for('get_settings') }}" class="btn btn-accent-light float-end"><i class="bi bi-pencil"></i></a>
+                        {% endif %}
+                    </h1>
+                    <h3 class="hero-subtitle mb-3">{{ settings.title }}</h3>
+                    <div class="row">
+                        <div class="col-4 col-md-3">Current status:</div>
+                        <div class="col-8 col-md-9">{{ settings.status }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 col-md-3">Availability:</div>
+                        <div class="col-8 col-md-9">
+                            {% if settings.availability == 'available' %}
+                                <span class="available">&#8226;</span>
+                            {% else %}
+                                <span class="unavailable">&#8226;</span>
+                            {% endif %}
+                            {{ settings.availability }}</div>
+                    </div>
+                    <p class="lead">{{ settings.bio }}</p>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                        <button type="button" class="btn btn-dark btn-lg px-4 me-md-2" data-bs-toggle="modal" data-bs-target="#cover">Learn More</button>
+                        <a href="{{ url_for('get_cv') }}" class="btn btn-light btn-lg px-4">Download CV</a>
+                    </div>
+                </div>
+                {% include "inc/social-links.html" %}
+            </div>
+        </div>
+    </section>
+    <!-- SKILLS SECTION -->
+    <section id="skills">
+        <!-- CREDIT: https://codepen.io/xyzzyestudioweb/pen/JgdKOR -->
+        <svg class="separator" width="100%" height="60" viewBox="0.1 0.1 180 40" preserveAspectRatio="none">
+            <linearGradient x1="0" y1="0" x2="100%" y2="0" id="gradient">
+                <stop class="gradient-light" offset="0"></stop>
+                <stop class="gradient-dark" offset="100%"></stop>
+            </linearGradient>
+            <g transform="translate(-18.298844,-77.973964)">
+                <path class="fill-dark"
+                    d="M 31.615583,86.351641 H 192.16499 v 26.901969 c 0,0 -32.03411,-14.237983 -59.62682,-12.72484 -22.34188,1.2252 -54.779359,9.72634 -54.779359,9.72634 0,0 -22.029534,3.62882 -34.471238,-1.88988 -12.441702,-5.51871 -11.67199,-22.013589 -11.67199,-22.013589 z">
+                </path>
+                <path fill="url(#gradient)"
+                    d="M 18.441597,78.106256 H 198.58126 v 39.288614 c 0,0 -43.10672,-27.825245 -73.47599,-19.687823 -30.369264,8.137423 -46.832208,12.548653 -46.832208,12.548653 0,0 -32.775418,8.05972 -46.735258,0 C 17.577964,102.19598 18.441597,78.106256 18.441597,78.106256 Z">
+                </path>
+            </g>
+        </svg>
+        <div class="container-xl">
+            <h2 class="section-title">Skills
+            {% if session['user'] %}
+                <div class="float-end mt-2 mx-2">
+                    <a href="{{ url_for('add_skill') }}" class="btn btn-success rounded-circle"><i class="bi bi-plus"></i></a>
+                    <a href="{{ url_for('get_skills') }}" class="btn btn-accent-light"><i class="bi bi-pencil"></i></a>
+                </div>
+            {% endif %}
+            </h2>
+            <div class="row">
+                {% for skill in skills %}
+                    <div class="col-6 col-md-4">
+                        <div class="skill-container">
+                            <span class="skill-label">{{ skill.name }}</span>
+                            <div class="progress">
+                                <div class="progress-bar bg-accent" role="progressbar" aria-label="{{ skill.name }}" style="width: {{ skill.percentage }}%"
+                                    aria-valuenow="{{ skill.percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <!-- EXPERIENCE SECTION -->
+    <section id="experience">
+        <!-- CREDIT: https://codepen.io/xyzzyestudioweb/pen/JgdKOR -->
+        <svg class="separator" xmlns="http://www.w3.org/2000/svg" width="100%" height="100" viewBox="0.4 0.2 200 44"
+            preserveAspectRatio="none">
+            <g class="separator" transform="translate(-9.2218046,-83.494585)">
+                <path class="fill-accent"
+                    d="M 9.484815,89.716055 H 209.81018 V 126.90507 L 110.46368,93.705147 9.579391,127.39334 Z" />
+                <path class="fill-bg-color"
+                    d="M 9.3544335,83.626877 H 209.68181 V 120.29057 L 110.46368,93.705147 9.4490103,120.77195 Z" />
+            </g>
+        </svg>
+        <div class="container-xl">
+            <h2 class="section-title">Experience
+                {% if session['user'] %}
+                <div class="float-end mt-2 mx-2">
+                    <a href="{{ url_for('add_experience') }}" class="btn btn-success rounded-circle"><i
+                            class="bi bi-plus"></i></a>
+                    <a href="{{ url_for('get_experience') }}" class="btn btn-accent-light"><i class="bi bi-pencil"></i></a>
+                </div>
+                {% endif %}
+            </h2>
+            {% for job in experience %}
+            <div class="card card-experience bg-accent mb-3 w-100">
+                <div class="row g-0">
+                    <div class="col-md-4 card-left">
+                        <i class="bi bi-code-square"></i>
+                        <span class="period">{{ job.period }}</span>
+                        <h4>{{ job.company }}</h4>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ job.role }}</h4>
+                            <p class="card-text">{{ job.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    <!-- EDUCATION SECTION -->
+    <section id="education">
+        <!-- CREDIT: https://codepen.io/xyzzyestudioweb/pen/JgdKOR -->
+        <svg class="separator" xmlns="http://www.w3.org/2000/svg" width="100%" height="100" viewBox="0.4 0.2 200 44"
+            preserveAspectRatio="none">
+            <g class="separator" transform="translate(-9.2218046,-83.494585)">
+                <path class="fill-dark"
+                    d="M 9.484815,89.716055 H 209.81018 V 126.90507 L 110.46368,93.705147 9.579391,127.39334 Z" />
+                <path class="fill-accent-light"
+                    d="M 9.3544335,83.626877 H 209.68181 V 120.29057 L 110.46368,93.705147 9.4490103,120.77195 Z" />
+            </g>
+        </svg>
+        <div class="container-xl">
+            <h2 class="section-title">Education
+                {% if session['user'] %}
+                <div class="float-end mt-2 mx-2">
+                    <a href="{{ url_for('add_education') }}" class="btn btn-success rounded-circle"><i
+                            class="bi bi-plus"></i></a>
+                    <a href="{{ url_for('get_education') }}" class="btn btn-accent-light"><i class="bi bi-pencil"></i></a>
+                </div>
+                {% endif %}
+            </h2>
+            {% for school in education %}
+            <div class="card card-education mb-3 w-100">
+                <div class="row g-0">
+                    <div class="col-md-4 bg-accent card-left">
+                        <i class="bi bi-book-half"></i>
+                        <h4>{{ school.school }}</h4>
+                        <span class="period">{{ school.period }}</span>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ school.title }}</h4>
+                            <h5 class="card-subtitle">{{ school.department }}</h5>
+                            <p class="card-text">{{ school.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    <!-- TESTIMONIALS SECTION -->
+    <section id="testimonials">
+        <!-- CREDIT: https://codepen.io/xyzzyestudioweb/pen/JgdKOR -->
+        <svg class="separator" xmlns="http://www.w3.org/2000/svg" width="100%" height="100" viewBox="0.4 0.2 200 44"
+            preserveAspectRatio="none">
+            <g class="separator" transform="translate(-9.2218046,-83.494585)">
+                <path class="fill-dark"
+                    d="M 9.484815,89.716055 H 209.81018 V 126.90507 L 110.46368,93.705147 9.579391,127.39334 Z" />
+                <path class="fill-bg-color"
+                    d="M 9.3544335,83.626877 H 209.68181 V 120.29057 L 110.46368,93.705147 9.4490103,120.77195 Z" />
+            </g>
+        </svg>
+        <div class="container-xl">
+            <h2 class="section-title text-shadow">Testimonials
+            {% if session['user'] %}
+                    <a href="{{ url_for('get_testimonials') }}" class="btn btn-accent-light float-end mt-2 mx-3"><i class="bi bi-pencil"></i></a>
+            {% endif %}
+            </h2>
+            <div class="card card-testimonials mb-3 w-100">
+                <div class="card-body">
+                    <div id="carousel-testimonials" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            {% for testimonial in testimonials %}
+                                {% if loop.index0 == 0 %}
+                                    <div class="carousel-item active">
+                                {% else %}
+                                    <div class="carousel-item">
+                                {% endif %}
+                                    <figure class="text-center">
+                                        <blockquote class="blockquote">
+                                            <p>{{ testimonial.text }}</p>
+                                        </blockquote>
+                                        <figcaption class="blockquote-footer">
+                                            {{ testimonial.author }} - <cite>{{ testimonial.role }}</cite>
+                                        </figcaption>
+                                    </figure>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="carousel-indicators">
+                            {% for testimonial in testimonials %}
+                                {% if loop.index0 == 0 %}
+                                    <button type="button" data-bs-target="#carousel-testimonials" data-bs-slide-to="0"
+                                        class="active" aria-current="true" aria-label="{{ testimonial.author }}"></button>
+                                {% else %}
+                                    <button type="button" data-bs-target="#carousel-testimonials"
+                                        data-bs-slide-to="{{ loop.index0 }}" aria-label="{{ testimonial.author }}"></button>
+                                {% endif %}
+                            {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+    <!-- Modal -->
+    <div class="modal fade" id="cover" tabindex="-1" aria-labelledby="coverLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="coverLabel">Bio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{ settings.cover }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-accent" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+    <!-- CREDIT: https://github.com/biati-digital/glightbox -->
+    <script>
+        const lightbox = GLightbox({ 'selector': '.gallery' });
+    </script>
+{% endblock scripts %}

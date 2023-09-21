@@ -1,0 +1,69 @@
+{% extends "admin/base.html" %}
+{% block content %}
+    <section id="get_links">
+        <div class="row my-2 align-items-center">
+            <div class="order-1 order-sm-0 col-sm-8 col-md-9 col-lg-10">
+                <h1 class="text-start my-2">Links</h1>
+            </div>
+            <div class="order-0 order-sm-1 col-8 offset-2 offset-sm-0 col-sm-4 col-md-3 col-lg-2 text-center">
+                <img src="{{ url_for('static', filename='images/links.svg') }}" alt="Skills" class="section-image">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <a href="{{ url_for('add_link') }}" class="btn btn-round btn-success float-end m-4" data-bs-toggle="tooltip"
+                    data-bs-placement="left" title="Add new"><i class="bi bi-plus"></i></a>
+            </div>
+        </div>
+        {% if links|length %}
+            <div class="card">
+                <form action="{{ url_for('get_links') }}" method="POST">
+                    {{ form.csrf_token }}
+                    <div class="card-header text-center">
+                        {{ form.submit(class="btn btn-lg btn-accent", id="submit-top") }}
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for link in links %}
+                            <li class="list-group-item d-flex justify-content-between">
+                                <div class="row w-100 align-items-center">
+                                    <div class="col-12 col-sm-4">
+                                        <div class="form-floating mb-3 mb-sm-0">
+                                            <input type="text" class="form-control mb-0" id="name[{{ link._id }}]"
+                                                name="name[{{ link._id }}]" value="{{ link.name }}">
+                                            <label for="name[{{ link._id }}]">Link name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-4">
+                                        <div class="form-floating mb-3 mb-sm-0">
+                                            <input type="text" class="form-control mb-0" id="url[{{ link._id }}]"
+                                                name="url[{{ link._id }}]" value="{{ link.url }}">
+                                            <label for="url[{{ link._id }}]">URL</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-4">
+                                        <div class="form-floating mb-3 mb-sm-0">
+                                            <input type="text" class="form-control mb-0" id="icon[{{ link._id }}]"
+                                                name="icon[{{ link._id }}]" value="{{ link.icon }}">
+                                            <label for="icon[{{ link._id }}]">Link icon</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="controls d-flex align-items-center ms-4">
+                                    <a href="{{ url_for('delete_link', id=link._id) }}" class="btn btn-sm btn-danger confirm"><i
+                                            class="bi bi-trash"></i></a>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="card-footer text-center">
+                        {{ form.submit(class="btn btn-lg btn-accent") }}
+                    </div>
+                </form>
+            </div>
+        {% else %}
+            <div class="col">
+                {% include "inc/no-results.html" %}
+            </div>
+        {% endif %}
+    </section>
+{% endblock content %}
