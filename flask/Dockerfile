@@ -1,28 +1,21 @@
-# syntax=docker/dockerfile:1.4
-FROM --platform=$BUILDPLATFORM python:3.10-alpine AS builder
+FROM python:3.6.8-alpine3.9
+
+LABEL MAINTAINER="Paul Istratoaie <p4ul.gg@gmail.com>"
+
+ENV GROUP_ID=1000 \
+    USER_ID=1000
 
 WORKDIR /var/www/pi-dev
-COPY requirements.txt /var/www/pi-dev
-RUN --mount=type=cache,target=/root/.cache/pip \
-    pip3 install -r requirements.txt
 
-COPY . .
+ADD . /var/www/pi-dev
+RUN pip install -r requirements.txt
+RUN pip install gunicorn
 
-CMD ["python3", "app.py"]
+RUN addgroup -g $GROUP_ID www
+RUN adduser -D -u $USER_ID -G www www -s /bin/sh
 
-FROM builder as dev-envs
+USER www
 
-RUN <<EOF
-apk update
-apk add git
-EOF
+EXPOSE 5000
 
-RUN <<EOF
-addgroup -S docker
-adduser -S --shell /bin/bash --ingroup docker vscode
-EOF
-
-# install Docker tools (cli, buildx, compose)
-COPY --from=gloursdocker/docker / /
-
-CMD ["python3", "app.py"]
+CMD [ "gunicorn", "-w", "4", "--bind", "0.0.0.0:5000", "wsgi"]
