@@ -1,65 +1,27 @@
-version: '3'
 services:
-
-  flask:
-    build:
-      context: app
-      dockerfile: Dockerfile
-    container_name: flask
-    image: digitalocean.com/flask-python:3.6
-    restart: unless-stopped
+  web:
+    image: nginx
     volumes:
-      - appdata:/var/www/pi-dev
+      - ./nginx/nginx.conf:/tmp/nginx.conf
+    environment:
+      - FLASK_SERVER_ADDR=backend:9091
+    command: /bin/bash -c "envsubst < /tmp/nginx.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+    ports:
+      - 80:80
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: flask
+      target: builder
+    # flask requires SIGINT to stop gracefully
+    # (default stop signal from Compose is SIGTERM)
+    stop_signal: SIGINT
+    volumes:
+      - ./flask:/src
     depends_on:
       - mongo
-    networks:
-      - frontend
-      - backend
 
   mongo:
-    image: mongo:4.0.8
-    container_name: mongo
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    command: mongod --auth
-    volumes:
-      - mongodbdata:/data/db/pi-dev
-    networks:
-      - backend
-
-  webserver:
-    build:
-      context: nginx
-      dockerfile: Dockerfile
-    image: digitalocean.com/webserver:latest
-    container_name: webserver
-    restart: unless-stopped
-    environment:
-      APP_ENV: "prod"
-      APP_NAME: "webserver"
-      APP_DEBUG: "true"
-      SERVICE_NAME: "webserver"
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - nginxdata:/var/log/nginx
-    depends_on:
-      - flask
-    networks:
-      - frontend
-
-networks:
-  frontend:
-    driver: bridge
-  backend:
-    driver: bridge
-
-volumes:
-  mongodbdata:
-    driver: local
-  appdata:
-    driver: local
-  nginxdata:
-    driver: local
+    image: mongo
