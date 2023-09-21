@@ -1,12 +1,16 @@
-FROM nginx:1.19.6-alpine
+FROM alpine:latest
 
 LABEL MAINTAINER="Paul Istratoaie <p4ul.gg@gmail.com>"
 
-RUN mkdir /etc/nginx/templates
-COPY conf.d/app.conf.template /etc/nginx/templates
+RUN apk --update add nginx && \
+    ln -sf /dev/stdout /var/log/nginx/access.log && \
+    ln -sf /dev/stderr /var/log/nginx/error.log && \
+    mkdir /etc/nginx/sites-enabled/ && \
+    mkdir -p /run/nginx && \
+    rm -rf /etc/nginx/conf.d/default.conf && \
+    rm -rf /var/cache/apk/*
 
-RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
-    ln -sf /dev/stderr /var/log/nginx/error.log
+COPY conf.d/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80 443
 CMD ["nginx", "-g", "daemon off;"]
