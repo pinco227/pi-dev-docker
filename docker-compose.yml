@@ -5,8 +5,8 @@ services:
       dockerfile: Dockerfile
     container_name: webserver
     restart: unless-stopped
-    environment:
-      SERVICE_NAME: "webserver"
+    env_file:
+      - stack.env
     ports:
       - "80:80"
       - "443:443"
@@ -25,9 +25,8 @@ services:
     # flask requires SIGINT to stop gracefully
     # (default stop signal from Compose is SIGTERM)
     stop_signal: SIGINT
-    environment:
-      - PORT=5000
-      - IP=0.0.0.0
+    env_file:
+      - stack.env
     volumes:
       - appdata:/var/www/pi-dev
     depends_on:
@@ -40,6 +39,8 @@ services:
     image: mongo:4.0.8
     container_name: mongo
     restart: unless-stopped
+    env_file:
+      - stack.env
     ports:
       - "27017:27017"
     command: mongod --auth
