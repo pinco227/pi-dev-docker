@@ -1,4 +1,5 @@
-FROM python:3.6.8-alpine3.9
+# syntax=docker/dockerfile:1.4
+FROM --platform=$BUILDPLATFORM python:3.10-alpine
 
 LABEL MAINTAINER="Paul Istratoaie <p4ul.gg@gmail.com>"
 
@@ -8,8 +9,9 @@ ENV GROUP_ID=1000 \
 WORKDIR /var/www/pi-dev
 
 ADD . /var/www/pi-dev
-RUN pip install -r requirements.txt
-RUN pip install gunicorn
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip3 install -r requirements.txt \
+    pip3 install gunicorn
 
 RUN addgroup -g $GROUP_ID www
 RUN adduser -D -u $USER_ID -G www www -s /bin/sh
